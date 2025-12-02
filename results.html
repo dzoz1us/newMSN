@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Результаты - MakeSomeNoize</title>
+    <meta name="description" content="Результаты матчей и статистика киберспортивной команды MakeSomeNoize">
+    <meta name="keywords" content="результаты матчей, статистика, победы, поражения, турниры, киберспорт">
+    <meta name="author" content="MakeSomeNoize Team">
+    <link rel="icon" href="assets/MSN1.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Локальные стили для страницы результатов */
+        .results-hero {
+            min-height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            border-bottom: 3px solid var(--primary-red);
+            padding: clamp(2rem, 8vh, 4rem) 1rem;
+        }
+        
+        .results-title {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        /* Статистика */
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            flex: 1 1 300px;
+            max-width: 500px;
+            background: var(--dark-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .stat-card:focus-within {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
+            outline: none;
+        }
+        
+        .stat-number {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-numbers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--gray);
+            border-radius: 8px;
+        }
+        
+        /* Прогресс-бары */
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-red);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .progress-fill {
+                transition: none;
+            }
+        }
+        
+        /* Таблица результатов с улучшенной доступностью */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .results-table caption {
+            caption-side: bottom;
+            text-align: left;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--light-gray);
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .results-table th {
+            background: var(--dark-gray);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .results-table tr:focus-within {
+            background: var(--gray);
+            outline: 2px solid var(--primary-red);
+            outline-offset: -2px;
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+            .results-table tr:hover {
+                background: var(--gray);
+            }
+        }
+        
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .team-logo {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+        
+        .result-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .result-win {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        
+        .result-loss {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .result-draw {
+            background: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+            border: 1px solid rgba(108, 117, 125, 0.3);
+        }
+        
+        /* Кнопка деталей */
+        .btn-details {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--primary-red);
+            color: var(--primary-red);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            min-height: 36px;
+            min-width: 36px;
+        }
+        
+        .btn-details:hover,
+        .btn-details:focus {
+            background: var(--primary-red);
+            color: var(--white);
+            outline: none;
+        }
+        
+        .btn-details:focus-visible {
+            outline: 3px solid var(--primary-red);
+            outline-offset: 2px;
+        }
+        
+        /* Карточки производительности */
+        .performance-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            justify-content: center;
+        }
+        
+        .performance-card {
+            flex: 1 1 250px;
+            max-width: 350px;
+            background: var(--dark-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .performance-card:focus-within {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
+            outline: none;
+        }
+        
+        .performance-icon {
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+        }
+        
+        .performance-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Адаптивность таблицы */
+        @media (max-width: 768px) {
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .results-table th,
+            .results-table td {
+                white-space: nowrap;
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+            }
+            
+            .team-cell {
+                min-width: 150px;
+            }
+            
+            .result-badge {
+                min-width: 70px;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            .btn-details {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Адаптивность статистических карточек */
+        @media (max-width: 639px) {
+            .stat-card,
+            .performance-card {
+                flex-basis: 100%;
+                max-width: 400px;
+            }
+            
+            .stats-numbers {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 640px) and (max-width: 959px) {
+            .stat-card {
+                flex-basis: calc(50% - 1rem);
+            }
+            
+            .performance-card {
+                flex-basis: calc(50% - 1rem);
+            }
+        }
+        
+        @media (min-width: 960px) {
+            .performance-card {
+                flex-basis: calc(33.333% - 1.33rem);
+            }
+        }
+        
+        /* Стили для модального окна с деталями матча */
+        .match-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .match-modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--dark-gray);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--primary-red);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            margin: 0;
+            color: var(--primary-red);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            border-radius: 4px;
+        }
+        
+        .modal-close:hover,
+        .modal-close:focus {
+            background: var(--primary-red);
+            outline: none;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+            text-align: right;
+        }
+        
+        /* Стили для детальной статистики */
+        .match-stats {
+            margin: 1.5rem 0;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .stats-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-label {
+            color: var(--light);
+        }
+        
+        .stats-value {
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        /* Стили для печати */
+        @media print {
+            .results-hero {
+                min-height: auto;
+                padding: 2rem 1rem;
+                border-bottom: 2px solid #000;
+            }
+            
+            .results-title {
+                color: #000 !important;
+            }
+            
+            .btn-details,
+            .match-modal,
+            .modal-close {
+                display: none !important;
+            }
+            
+            .results-table th {
+                background: #f0f0f0 !important;
+                color: #000 !important;
+            }
+            
+            .results-table tr {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Фильтры и сортировка */
+        .results-filters {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--dark-gray);
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .filter-select {
+            padding: 0.5rem 1rem;
+            background: var(--gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            color: var(--white);
+            min-width: 150px;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- Ссылка для пропуска навигации -->
+    <a href="#main-content" class="skip-link sr-only sr-only-focusable">
+        Перейти к основному содержимому
+    </a>
+
+    <!-- Навигация -->
+    <nav class="main-nav" role="navigation" aria-label="Основная навигация">
+        <div class="nav-container">
+            <a href="makesomenoize.html" class="nav-brand" aria-label="MakeSomeNoize - главная страница">
+                <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+                <span>MakeSomeNoize</span>
+            </a>
+            
+            <button class="nav-toggle" 
+                    aria-expanded="false" 
+                    aria-controls="nav-menu" 
+                    aria-label="Открыть меню навигации">
+                <span class="sr-only">Меню</span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul id="nav-menu" class="nav-menu" role="menubar">
+                <li role="none">
+                    <a href="makesomenoize.html" 
+                       class="nav-link" 
+                       role="menuitem">
+                        <i class="bi bi-house-door" aria-hidden="true"></i>
+                        <span>Главная</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="contact.html" 
+                       class="nav-link" 
+                       role="menuitem">
+                        <i class="bi bi-envelope" aria-hidden="true"></i>
+                        <span>Контакты</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="results.html" 
+                       class="nav-link active" 
+                       role="menuitem" 
+                       aria-current="page">
+                        <i class="bi bi-trophy" aria-hidden="true"></i>
+                        <span>Результаты</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main id="main-content" class="main-content" role="main">
+        <!-- Герой секция -->
+        <section class="results-hero" aria-labelledby="hero-title">
+            <div class="container">
+                <h1 id="hero-title" class="results-title text-custom-red">Результаты</h1>
+                <p class="lead">Статистика и результаты последних матчей команды</p>
+            </div>
+        </section>
+
+        <!-- Статистика команды -->
+        <section class="section section-dark" 
+                 aria-labelledby="stats-title"
+                 aria-describedby="stats-description">
+            <div class="container">
+                <h2 id="stats-title" class="section-title">Статистика команды</h2>
+                <p id="stats-description" class="lead mb-5">
+                    Подробная статистика выступлений команды на различных картах
+                </p>
+                
+                <div class="stats-grid" role="list">
+                    <!-- Карта статистики по картам -->
+                    <div class="stat-card" 
+                         role="listitem" 
+                         tabindex="0"
+                         aria-labelledby="maps-stats-title">
+                        <h3 id="maps-stats-title" class="h4 text-white mb-4">Процент побед за последние 30 игр</h3>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span class="text-white">Ancient</span>
+                                <span class="text-custom-red" aria-label="73 процента">73%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 73%" aria-label="73 процента"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span class="text-white">Mirage</span>
+                                <span class="text-custom-red" aria-label="65 процентов">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%" aria-label="65 процентов"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span class="text-white">Inferno</span>
+                                <span class="text-custom-red" aria-label="58 процентов">58%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 58%" aria-label="58 процентов"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span class="text-white">Nuke</span>
+                                <span class="text-custom-red" aria-label="52 процента">52%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 52%" aria-label="52 процента"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span class="text-white">Overpass</span>
+                                <span class="text-custom-red" aria-label="48 процентов">48%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 48%" aria-label="48 процентов"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Общая статистика -->
+                    <div class="stat-card" 
+                         role="listitem" 
+                         tabindex="0"
+                         aria-labelledby="general-stats-title">
+                        <h3 id="general-stats-title" class="h4 text-white mb-4">Общая статистика</h3>
+                        
+                        <div class="stats-numbers" role="list">
+                            <div class="stat-item" role="listitem">
+                                <div class="stat-number" aria-label="67 процентов">67%</div>
+                                <div class="text-white">Общий винрейт</div>
+                            </div>
+                            
+                            <div class="stat-item" role="listitem">
+                                <div class="stat-number" aria-label="18 побед">18</div>
+                                <div class="text-white">Побед</div>
+                            </div>
+                            
+                            <div class="stat-item" role="listitem">
+                                <div class="stat-number" aria-label="9 поражений">9</div>
+                                <div class="text-white">Поражений</div>
+                            </div>
+                            
+                            <div class="stat-item" role="listitem">
+                                <div class="stat-number" aria-label="3 ничьи">3</div>
+                                <div class="text-white">Ничьих</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Таблица результатов -->
+        <section class="section section-black" 
+                 aria-labelledby="matches-title"
+                 aria-describedby="matches-description">
+            <div class="container">
+                <h2 id="matches-title" class="section-title">Последние матчи</h2>
+                <p id="matches-description" class="lead mb-5">
+                    Детальная информация о последних матчах команды
+                </p>
+                
+                <!-- Фильтры для таблицы -->
+                <div class="results-filters" aria-label="Фильтры для таблицы результатов">
+                    <div class="filter-group">
+                        <span class="filter-label">Фильтр:</span>
+                        <select class="filter-select" 
+                                id="filter-result" 
+                                aria-label="Фильтр по результату">
+                            <option value="all">Все результаты</option>
+                            <option value="win">Только победы</option>
+                            <option value="loss">Только поражения</option>
+                        </select>
+                        
+                        <select class="filter-select" 
+                                id="filter-tournament" 
+                                aria-label="Фильтр по турниру">
+                            <option value="all">Все турниры</option>
+                            <option value="pgl">PGL Bucharest</option>
+                            <option value="fissure">FISSURE PLAYGROUND</option>
+                        </select>
+                        
+                        <button id="reset-filters" 
+                                class="btn btn-outline btn-sm"
+                                aria-label="Сбросить фильтры">
+                            Сбросить
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="results-table" 
+                           aria-labelledby="matches-title"
+                           aria-describedby="matches-description">
+                        <caption>Таблица результатов последних матчей команды MakeSomeNoize</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" id="col-date">Дата</th>
+                                <th scope="col" id="col-tournament">Турнир</th>
+                                <th scope="col" id="col-opponent">Противник</th>
+                                <th scope="col" id="col-map">Карта</th>
+                                <th scope="col" id="col-score">Счёт</th>
+                                <th scope="col" id="col-result">Результат</th>
+                                <th scope="col" id="col-actions">
+                                    <span class="sr-only">Действия</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Матч 1 -->
+                            <tr tabindex="0" 
+                                role="row"
+                                data-result="win" 
+                                data-tournament="pgl"
+                                aria-labelledby="match-row-1">
+                                <td headers="col-date">
+                                    <time datetime="2025-10-10" id="match-row-1">10.10.2025</time>
+                                </td>
+                                <td headers="col-tournament">PGL Bucharest 2025</td>
+                                <td headers="col-opponent">
+                                    <div class="team-cell">
+                                        <!-- Picture element для адаптивных логотипов -->
+                                        <picture>
+                                            <source srcset="assets/NAVI.webp" type="image/webp">
+                                            <source srcset="assets/NAVI.png 1x, assets/NAVI@2x.png 2x" type="image/png">
+                                            <img src="assets/NAVI.png" 
+                                                 alt="Логотип Natus Vincere" 
+                                                 class="team-logo" 
+                                                 width="24" 
+                                                 height="24" 
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </picture>
+                                        <span>Natus Vincere</span>
+                                    </div>
+                                </td>
+                                <td headers="col-map">Ancient</td>
+                                <td headers="col-score">
+                                    <span aria-label="Счёт 13:11 в пользу MakeSomeNoize">
+                                        13:11
+                                    </span>
+                                </td>
+                                <td headers="col-result">
+                                    <span class="result-badge result-win" 
+                                          role="status"
+                                          aria-label="Победа">
+                                        Победа
+                                    </span>
+                                </td>
+                                <td headers="col-actions">
+                                    <button class="btn-details" 
+                                            data-match="1"
+                                            aria-label="Показать детали матча с Natus Vincere"
+                                            aria-expanded="false"
+                                            aria-controls="match-details-1">
+                                        Детали
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Матч 2 -->
+                            <tr tabindex="0" 
+                                role="row"
+                                data-result="loss" 
+                                data-tournament="pgl"
+                                aria-labelledby="match-row-2">
+                                <td headers="col-date">
+                                    <time datetime="2025-10-08" id="match-row-2">08.10.2025</time>
+                                </td>
+                                <td headers="col-tournament">PGL Bucharest 2025</td>
+                                <td headers="col-opponent">
+                                    <div class="team-cell">
+                                        <picture>
+                                            <source srcset="assets/VirtusPro.webp" type="image/webp">
+                                            <source srcset="assets/VirtusPro.png 1x, assets/VirtusPro@2x.png 2x" type="image/png">
+                                            <img src="assets/VirtusPro.png" 
+                                                 alt="Логотип Virtus.pro" 
+                                                 class="team-logo" 
+                                                 width="24" 
+                                                 height="24" 
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </picture>
+                                        <span>Virtus.pro</span>
+                                    </div>
+                                </td>
+                                <td headers="col-map">Mirage</td>
+                                <td headers="col-score">
+                                    <span aria-label="Счёт 11:13 в пользу Virtus.pro">
+                                        11:13
+                                    </span>
+                                </td>
+                                <td headers="col-result">
+                                    <span class="result-badge result-loss" 
+                                          role="status"
+                                          aria-label="Поражение">
+                                        Поражение
+                                    </span>
+                                </td>
+                                <td headers="col-actions">
+                                    <button class="btn-details" 
+                                            data-match="2"
+                                            aria-label="Показать детали матча с Virtus.pro"
+                                            aria-expanded="false"
+                                            aria-controls="match-details-2">
+                                        Детали
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Матч 3 -->
+                            <tr tabindex="0" 
+                                role="row"
+                                data-result="win" 
+                                data-tournament="pgl"
+                                aria-labelledby="match-row-3">
+                                <td headers="col-date">
+                                    <time datetime="2025-10-05" id="match-row-3">05.10.2025</time>
+                                </td>
+                                <td headers="col-tournament">PGL Bucharest 2025</td>
+                                <td headers="col-opponent">
+                                    <div class="team-cell">
+                                        <picture>
+                                            <source srcset="assets/FazeClan1.webp" type="image/webp">
+                                            <source srcset="assets/FazeClan1.png 1x, assets/FazeClan1@2x.png 2x" type="image/png">
+                                            <img src="assets/FazeClan1.png" 
+                                                 alt="Логотип FaZe Clan" 
+                                                 class="team-logo" 
+                                                 width="24" 
+                                                 height="24" 
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </picture>
+                                        <span>FaZe Clan</span>
+                                    </div>
+                                </td>
+                                <td headers="col-map">Inferno</td>
+                                <td headers="col-score">
+                                    <span aria-label="Счёт 13:9 в пользу MakeSomeNoize">
+                                        13:9
+                                    </span>
+                                </td>
+                                <td headers="col-result">
+                                    <span class="result-badge result-win" 
+                                          role="status"
+                                          aria-label="Победа">
+                                        Победа
+                                    </span>
+                                </td>
+                                <td headers="col-actions">
+                                    <button class="btn-details" 
+                                            data-match="3"
+                                            aria-label="Показать детали матча с FaZe Clan"
+                                            aria-expanded="false"
+                                            aria-controls="match-details-3">
+                                        Детали
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Матч 4 -->
+                            <tr tabindex="0" 
+                                role="row"
+                                data-result="loss" 
+                                data-tournament="pgl"
+                                aria-labelledby="match-row-4">
+                                <td headers="col-date">
+                                    <time datetime="2025-10-02" id="match-row-4">02.10.2025</time>
+                                </td>
+                                <td headers="col-tournament">PGL Bucharest 2025</td>
+                                <td headers="col-opponent">
+                                    <div class="team-cell">
+                                        <picture>
+                                            <source srcset="assets/G2.webp" type="image/webp">
+                                            <source srcset="assets/G2.png 1x, assets/G2@2x.png 2x" type="image/png">
+                                            <img src="assets/G2.png" 
+                                                 alt="Логотип G2 Esports" 
+                                                 class="team-logo" 
+                                                 width="24" 
+                                                 height="24" 
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </picture>
+                                        <span>G2 Esports</span>
+                                    </div>
+                                </td>
+                                <td headers="col-map">Nuke</td>
+                                <td headers="col-score">
+                                    <span aria-label="Счёт 13:16 в пользу G2 Esports">
+                                        13:16
+                                    </span>
+                                </td>
+                                <td headers="col-result">
+                                    <span class="result-badge result-loss" 
+                                          role="status"
+                                          aria-label="Поражение">
+                                        Поражение
+                                    </span>
+                                </td>
+                                <td headers="col-actions">
+                                    <button class="btn-details" 
+                                            data-match="4"
+                                            aria-label="Показать детали матча с G2 Esports"
+                                            aria-expanded="false"
+                                            aria-controls="match-details-4">
+                                        Детали
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Матч 5 -->
+                            <tr tabindex="0" 
+                                role="row"
+                                data-result="win" 
+                                data-tournament="fissure"
+                                aria-labelledby="match-row-5">
+                                <td headers="col-date">
+                                    <time datetime="2025-09-28" id="match-row-5">28.09.2025</time>
+                                </td>
+                                <td headers="col-tournament">FISSURE PLAYGROUND 2025</td>
+                                <td headers="col-opponent">
+                                    <div class="team-cell">
+                                        <picture>
+                                            <source srcset="assets/NIP.webp" type="image/webp">
+                                            <source srcset="assets/NIP.png 1x, assets/NIP@2x.png 2x" type="image/png">
+                                            <img src="assets/NIP.png" 
+                                                 alt="Логотип Ninjas in Pyjamas" 
+                                                 class="team-logo" 
+                                                 width="24" 
+                                                 height="24" 
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </picture>
+                                        <span>Ninjas in Pyjamas</span>
+                                    </div>
+                                </td>
+                                <td headers="col-map">Ancient</td>
+                                <td headers="col-score">
+                                    <span aria-label="Счёт 13:5 в пользу MakeSomeNoize">
+                                        13:5
+                                    </span>
+                                </td>
+                                <td headers="col-result">
+                                    <span class="result-badge result-win" 
+                                          role="status"
+                                          aria-label="Победа">
+                                        Победа
+                                    </span>
+                                </td>
+                                <td headers="col-actions">
+                                    <button class="btn-details" 
+                                            data-match="5"
+                                            aria-label="Показать детали матча с Ninjas in Pyjamas"
+                                            aria-expanded="false"
+                                            aria-controls="match-details-5">
+                                        Детали
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Навигация по страницам таблицы -->
+                <nav aria-label="Навигация по страницам результатов">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <span class="page-link">Предыдущая</span>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">
+                                1 <span class="sr-only">(текущая страница)</span>
+                            </span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Страница 2">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Страница 3">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Следующая страница">Следующая</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Производительность -->
+        <section class="section section-dark" 
+                 aria-labelledby="performance-title"
+                 aria-describedby="performance-description">
+            <div class="container">
+                <h2 id="performance-title" class="section-title text-center">Последние выступления</h2>
+                <p id="performance-description" class="lead text-center mb-5">
+                    Ключевые показатели команды в текущем сезоне
+                </p>
+                
+                <div class="performance-grid" role="list">
+                    <!-- Серия побед -->
+                    <div class="performance-card" 
+                         role="listitem" 
+                         tabindex="0"
+                         aria-labelledby="streak-title">
+                        <div class="performance-icon" aria-hidden="true">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h3 id="streak-title" class="h4 text-white">Текущая серия</h3>
+                        <div class="performance-number" aria-label="4 победы подряд">4</div>
+                        <p class="text-white">побед подряд</p>
+                    </div>
+                    
+                    <!-- Лучшая карта -->
+                    <div class="performance-card" 
+                         role="listitem" 
+                         tabindex="0"
+                         aria-labelledby="best-map-title">
+                        <div class="performance-icon" aria-hidden="true">
+                            <i class="bi bi-trophy"></i>
+                        </div>
+                        <h3 id="best-map-title" class="h4 text-white">Лучшая карта</h3>
+                        <div class="performance-number" aria-label="73 процента побед на Ancient">73%</div>
+                        <p class="text-white">Ancient</p>
+                    </div>
+                    
+                    <!-- Рейтинг -->
+                    <div class="performance-card" 
+                         role="listitem" 
+                         tabindex="0"
+                         aria-labelledby="ranking-title">
+                        <div class="performance-icon" aria-hidden="true">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                        <h3 id="ranking-title" class="h4 text-white">Рейтинг HLTV</h3>
+                        <div class="performance-number" aria-label="9 место в рейтинге">#9</div>
+                        <p class="text-white">+2 за месяц</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3 class="footer-title">MakeSomeNoize</h3>
+                    <p class="footer-description">Профессиональная киберспортивная организация по Counter-Strike 2</p>
+                </div>
+                
+                <div class="footer-social">
+                    <div class="social-links" role="list" aria-label="Социальные сети команды">
+                        <a href="https://www.twitch.tv/dzozius" 
+                           class="social-link" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           role="listitem"
+                           aria-label="Twitch канал команды (открывается в новой вкладке)">
+                            <i class="bi bi-twitch" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://t.me/misterssniskers" 
+                           class="social-link" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           role="listitem"
+                           aria-label="Telegram канал команды (открывается в новой вкладке)">
+                            <i class="bi bi-telegram" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@Dzozius" 
+                           class="social-link" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           role="listitem"
+                           aria-label="YouTube канал команды (открывается в новой вкладке)">
+                            <i class="bi bi-youtube" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://discord.com/channels/1433221011465179230/1433221013272793170" 
+                           class="social-link" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           role="listitem"
+                           aria-label="Discord сервер команды (открывается в новой вкладке)">
+                            <i class="bi bi-discord" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.instagram.com/igornuyanzin_?igsh=dmg5NGdjZjd2b3Y4&utm_source=qr" 
+                           class="social-link" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           role="listitem"
+                           aria-label="Instagram команды (открывается в новой вкладке)">
+                            <i class="bi bi-instagram" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    
+                    <p class="footer-copyright">&copy; 2025 MakeSomeNoize. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для деталей матча -->
+    <div id="match-modal" 
+         class="match-modal" 
+         role="dialog" 
+         aria-modal="true"
+         aria-labelledby="modal-title"
+         aria-describedby="modal-description">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title">Детали матча</h2>
+                <button class="modal-close" 
+                        aria-label="Закрыть модальное окно"
+                        data-dismiss="modal">
+                    <i class="bi bi-x" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-description">
+                    <!-- Контент будет заполнен JavaScript -->
+                </div>
+                
+                <div class="match-stats">
+                    <h3 class="h5 text-white mb-3">Статистика матча</h3>
+                    <div class="stats-row">
+                        <span class="stats-label">Общий урон:</span>
+                        <span class="stats-value" id="stat-damage">-</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">Количество фрагов:</span>
+                        <span class="stats-value" id="stat-kills">-</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">Помощи:</span>
+                        <span class="stats-value" id="stat-assists">-</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">Смерти:</span>
+                        <span class="stats-value" id="stat-deaths">-</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">Рейтинг HLTV:</span>
+                        <span class="stats-value" id="stat-rating">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modal-close-btn">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Навигация
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        navToggle.addEventListener('click', () => {
+            const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+            navToggle.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('show');
+            
+            if (!isExpanded) {
+                setTimeout(() => {
+                    navMenu.querySelector('a').focus();
+                }, 100);
+            }
+        });
+        
+        // Закрытие меню по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (navToggle.getAttribute('aria-expanded') === 'true') {
+                    navToggle.click();
+                }
+                
+                // Закрытие модального окна если открыто
+                const modal = document.getElementById('match-modal');
+                if (modal.classList.contains('show')) {
+                    closeModal();
+                }
+            }
+        });
+        
+        // Модальное окно для деталей матча
+        const modal = document.getElementById('match-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalClose = document.querySelector('.modal-close');
+        
+        // Данные для матчей
+        const matchData = {
+            1: {
+                title: "MakeSomeNoize vs Natus Vincere",
+                date: "10 октября 2025",
+                tournament: "PGL Bucharest 2025",
+                map: "Ancient",
+                score: "13:11",
+                result: "Победа",
+                description: "Напряженный матч на карте Ancient. Команда показала отличную игру на обеих сторонах.",
+                stats: {
+                    damage: "1850",
+                    kills: "72",
+                    assists: "45",
+                    deaths: "58",
+                    rating: "1.25"
+                }
+            },
+            2: {
+                title: "MakeSomeNoize vs Virtus.pro",
+                date: "8 октября 2025",
+                tournament: "PGL Bucharest 2025",
+                map: "Mirage",
+                score: "11:13",
+                result: "Поражение",
+                description: "Близкий матч на Mirage. Решающим стал пистолетный раунд во второй половине.",
+                stats: {
+                    damage: "1620",
+                    kills: "65",
+                    assists: "38",
+                    deaths: "70",
+                    rating: "0.98"
+                }
+            },
+            3: {
+                title: "MakeSomeNoize vs FaZe Clan",
+                date: "5 октября 2025",
+                tournament: "PGL Bucharest 2025",
+                map: "Inferno",
+                score: "13:9",
+                result: "Победа",
+                description: "Уверенная победа на Inferno. Отличная игра в атаке принесла победу.",
+                stats: {
+                    damage: "1920",
+                    kills: "75",
+                    assists: "42",
+                    deaths: "52",
+                    rating: "1.32"
+                }
+            },
+            4: {
+                title: "MakeSomeNoize vs G2 Esports",
+                date: "2 октября 2025",
+                tournament: "PGL Bucharest 2025",
+                map: "Nuke",
+                score: "13:16",
+                result: "Поражение",
+                description: "Овертайм на Nuke. К сожалению, не удалось взять решающие раунды.",
+                stats: {
+                    damage: "1780",
+                    kills: "68",
+                    assists: "40",
+                    deaths: "65",
+                    rating: "1.05"
+                }
+            },
+            5: {
+                title: "MakeSomeNoize vs Ninjas in Pyjamas",
+                date: "28 сентября 2025",
+                tournament: "FISSURE PLAYGROUND 2025",
+                map: "Ancient",
+                score: "13:5",
+                result: "Победа",
+                description: "Разгромная победа на Ancient. Команда доминировала с первых раундов.",
+                stats: {
+                    damage: "2100",
+                    kills: "85",
+                    assists: "48",
+                    deaths: "45",
+                    rating: "1.45"
+                }
+            }
+        };
+        
+        // Обработка кнопок "Детали"
+        document.querySelectorAll('.btn-details').forEach(button => {
+            button.addEventListener('click', function() {
+                const matchId = this.getAttribute('data-match');
+                const data = matchData[matchId];
+                
+                if (data) {
+                    openModal(data);
+                    this.setAttribute('aria-expanded', 'true');
+                    
+                    // Обновление всех кнопок
+                    document.querySelectorAll('.btn-details').forEach(btn => {
+                        if (btn !== this) {
+                            btn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+            });
+            
+            // Поддержка клавиатуры
+            button.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    button.click();
+                }
+            });
+        });
+        
+        // Открытие модального окна
+        function openModal(data) {
+            modalTitle.textContent = data.title;
+            
+            modalDescription.innerHTML = `
+                <div class="match-info">
+                    <p><strong>Дата:</strong> ${data.date}</p>
+                    <p><strong>Турнир:</strong> ${data.tournament}</p>
+                    <p><strong>Карта:</strong> ${data.map}</p>
+                    <p><strong>Счёт:</strong> ${data.score}</p>
+                    <p><strong>Результат:</strong> 
+                        <span class="result-badge ${data.result === 'Победа' ? 'result-win' : 'result-loss'}">
+                            ${data.result}
+                        </span>
+                    </p>
+                    <p class="mt-3">${data.description}</p>
+                </div>
+            `;
+            
+            // Заполнение статистики
+            document.getElementById('stat-damage').textContent = data.stats.damage;
+            document.getElementById('stat-kills').textContent = data.stats.kills;
+            document.getElementById('stat-assists').textContent = data.stats.assists;
+            document.getElementById('stat-deaths').textContent = data.stats.deaths;
+            document.getElementById('stat-rating').textContent = data.stats.rating;
+            
+            // Показать модальное окно
+            modal.classList.add('show');
+            modal.setAttribute('aria-hidden', 'false');
+            
+            // Запретить скролл на заднем плане
+            document.body.style.overflow = 'hidden';
+            
+            // Фокус на кнопке закрытия
+            setTimeout(() => {
+                modalClose.focus();
+            }, 100);
+            
+            // Ловушка фокуса внутри модального окна
+            trapFocus(modal);
+        }
+        
+        // Закрытие модального окна
+        function closeModal() {
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = 'auto';
+            
+            // Сброс состояния кнопок
+            document.querySelectorAll('.btn-details').forEach(btn => {
+                btn.setAttribute('aria-expanded', 'false');
+            });
+            
+            // Вернуть фокус на кнопку которая открыла модальное окно
+            const activeButton = document.querySelector('.btn-details[aria-expanded="true"]');
+            if (activeButton) {
+                setTimeout(() => {
+                    activeButton.focus();
+                }, 100);
+            }
+        }
+        
+        // Обработчики закрытия модального окна
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalClose.addEventListener('click', closeModal);
+        
+        // Закрытие по клику на затемнение
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Ловушка фокуса внутри модального окна
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusableElement = focusableElements[0];
+            const lastFocusableElement = focusableElements[focusableElements.length - 1];
+            
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) {
+                        // Shift + Tab
+                        if (document.activeElement === firstFocusableElement) {
+                            e.preventDefault();
+                            lastFocusableElement.focus();
+                        }
+                    } else {
+                        // Tab
+                        if (document.activeElement === lastFocusableElement) {
+                            e.preventDefault();
+                            firstFocusableElement.focus();
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Фильтрация таблицы
+        const filterResult = document.getElementById('filter-result');
+        const filterTournament = document.getElementById('filter-tournament');
+        const resetFilters = document.getElementById('reset-filters');
+        const tableRows = document.querySelectorAll('.results-table tbody tr');
+        
+        function filterTable() {
+            const resultValue = filterResult.value;
+            const tournamentValue = filterTournament.value;
+            
+            tableRows.forEach(row => {
+                const rowResult = row.getAttribute('data-result');
+                const rowTournament = row.getAttribute('data-tournament');
+                
+                let showRow = true;
+                
+                if (resultValue !== 'all' && rowResult !== resultValue) {
+                    showRow = false;
+                }
+                
+                if (tournamentValue !== 'all' && rowTournament !== tournamentValue) {
+                    showRow = false;
+                }
+                
+                if (showRow) {
+                    row.style.display = '';
+                    row.setAttribute('aria-hidden', 'false');
+                } else {
+                    row.style.display = 'none';
+                    row.setAttribute('aria-hidden', 'true');
+                }
+            });
+            
+            // Обновление live region для скринридеров
+            const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+            const rowCount = visibleRows.length;
+            
+            announceToScreenReader(`Показано ${rowCount} матчей из ${tableRows.length}`);
+        }
+        
+        filterResult.addEventListener('change', filterTable);
+        filterTournament.addEventListener('change', filterTable);
+        
+        resetFilters.addEventListener('click', () => {
+            filterResult.value = 'all';
+            filterTournament.value = 'all';
+            filterTable();
+            announceToScreenReader('Фильтры сброшены');
+        });
+        
+        // Функция для объявления скринридерам
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.classList.add('sr-only');
+            announcement.textContent = message;
+            
+            document.body.appendChild(announcement);
+            
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+        
+        // Анимация прогресс-баров
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const fill = entry.target;
+                        const width = fill.style.width;
+                        fill.style.width = '0';
+                        
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 300);
+                        
+                        observer.unobserve(fill);
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+            
+            progressFills.forEach(fill => observer.observe(fill));
+            
+            // Lazy loading изображений
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.classList.add('loaded');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(img => imageObserver.observe(img));
+        });
+        
+        // Плавный скролл
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href === '#!') return;
+                
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                        
+                        if (prefersReducedMotion) {
+                            targetElement.scrollIntoView();
+                        } else {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                        
+                        // Фокус для доступности
+                        setTimeout(() => {
+                            if (!targetElement.hasAttribute('tabindex')) {
+                                targetElement.setAttribute('tabindex', '-1');
+                            }
+                            targetElement.focus();
+                        }, 1000);
+                    }
+                }
+            });
+        });
+        
+        // Навигация по таблице с клавиатуры
+        document.querySelectorAll('.results-table tbody tr').forEach((row, index) => {
+            row.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const detailsBtn = row.querySelector('.btn-details');
+                    if (detailsBtn) {
+                        detailsBtn.click();
+                    }
+                }
+                
+                // Навигация стрелками
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const nextRow = tableRows[index + 1];
+                    if (nextRow && nextRow.style.display !== 'none') {
+                        nextRow.focus();
+                    }
+                }
+                
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevRow = tableRows[index - 1];
+                    if (prevRow && prevRow.style.display !== 'none') {
+                        prevRow.focus();
+                    }
+                }
+            });
+        });
+        
+        // Обнаружение клавиатурной навигации
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-navigation');
+        });
+        
+        // Экспорт таблицы (демо-функция)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                alert('Используйте системную печать для экспорта таблицы результатов.');
+            }
+        });
+    </script>
+</body>
+</html>

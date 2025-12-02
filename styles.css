@@ -1,0 +1,1413 @@
+/* Основные стили для сайта MakeSomeNoize v3 */
+/* Соответствует требованиям практических занятий №16 и №17 */
+
+/* Корневая палитра и системные настройки */
+:root {
+    /* Цветовая схема */
+    --primary-red: #dc3545;
+    --dark-red: #b02a37;
+    --black: #000000;
+    --dark-gray: #1a1a1a;
+    --gray: #2d2d2d;
+    --light-gray: #404040;
+    --white: #ffffff;
+    --light: #f8f9fa;
+    
+    /* Переменные для типографики */
+    --font-base: 16px;
+    --font-scale: 1.25;
+    --font-small: 0.875rem;
+    --font-large: 1.125rem;
+    
+    /* Переменные для отступов */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    
+    /* Брейкпоинты */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    
+    /* Системная тема */
+    color-scheme: light dark;
+}
+
+/* ====================== */
+/* БАЗОВЫЕ СБРОСЫ И ФИКСЫ ДЛЯ СКРОЛЛА */
+/* ====================== */
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ====================== */
+/* A11y Улучшения (Занятие 17) */
+/* ====================== */
+
+/* Плавные переходы для пользователей, которые не предпочитают уменьшенное движение */
+@media (prefers-reduced-motion: no-preference) {
+    * {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Отключение анимаций для пользователей, предпочитающих уменьшенное движение */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Улучшенный контраст */
+@media (prefers-contrast: more) {
+    :root {
+        --primary-red: #c82333;
+        --dark-red: #a71e2a;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        outline: 2px solid var(--white);
+        outline-offset: 2px;
+    }
+}
+
+/* ====================== */
+/* Ссылка для пропуска навигации (A11y) */
+/* ====================== */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 10px;
+    background: var(--primary-red);
+    color: var(--white);
+    padding: 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 10000;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 10px;
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+/* ====================== */
+/* Screen Reader Only */
+/* ====================== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ====================== */
+/* Улучшенные стили фокуса */
+/* ====================== */
+:focus-visible {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.3);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+/* ====================== */
+/* ОСНОВНАЯ НАВИГАЦИЯ */
+/* ====================== */
+.main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--black);
+    border-bottom: 1px solid var(--light-gray);
+    padding: var(--space-md);
+    isolation: isolate;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary-red);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+    flex-direction: column;
+    gap: 4px;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-red);
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.nav-link:focus {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+/* ====================== */
+/* ОСНОВНОЙ КОНТЕНТ */
+/* ====================== */
+.main-content {
+    flex: 1 0 auto;
+    width: 100%;
+    display: block;
+}
+
+/* ====================== */
+/* СЕКЦИИ */
+/* ====================== */
+.section {
+    padding: clamp(var(--space-2xl), 8vw, 6rem) var(--space-md);
+    width: 100%;
+    position: relative;
+}
+
+.section-dark {
+    background: var(--dark-gray);
+}
+
+.section-black {
+    background: var(--black);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+    position: relative;
+}
+
+/* ====================== */
+/* ЗАГОЛОВКИ СЕКЦИЙ */
+/* ====================== */
+.section-title {
+    position: relative;
+    margin-bottom: clamp(var(--space-xl), 5vw, var(--space-2xl));
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 60px;
+    height: 3px;
+    background: var(--primary-red);
+}
+
+.section-title.text-center {
+    text-align: center;
+}
+
+.section-title.text-center::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ====================== */
+/* КНОПКИ */
+/* ====================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(var(--space-sm), calc((44px - 1em) / 2)) var(--space-lg);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--primary-red);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--dark-red);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-primary:focus-visible {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border-color: var(--white);
+}
+
+.btn-secondary:hover {
+    background: var(--white);
+    color: var(--black);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:focus-visible {
+    outline: 3px solid var(--white);
+    outline-offset: 2px;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.btn-outline:hover {
+    background: var(--primary-red);
+    color: var(--white);
+}
+
+.btn-sm {
+    padding: max(var(--space-xs), calc((36px - 1em) / 2)) var(--space-md);
+    font-size: 0.875rem;
+    min-height: 36px;
+    min-width: 36px;
+}
+
+/* ====================== */
+/* ФУТЕР */
+/* ====================== */
+.footer {
+    background: var(--black);
+    border-top: 2px solid var(--primary-red);
+    padding: var(--space-xl) var(--space-md);
+    flex-shrink: 0;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: var(--space-xl);
+}
+
+.footer-brand {
+    text-align: center;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary-red);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-description {
+    color: var(--light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-social {
+    text-align: center;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--dark-gray);
+    color: var(--white);
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.social-link:hover {
+    background: var(--primary-red);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.social-link:focus-visible {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+.footer-copyright {
+    color: var(--light-gray);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* ====================== */
+/* ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ */
+/* ====================== */
+.text-custom-red {
+    color: var(--primary-red) !important;
+}
+
+.text-white {
+    color: var(--white) !important;
+}
+
+.text-light {
+    color: var(--light) !important;
+}
+
+.bg-custom-dark {
+    background: var(--dark-gray) !important;
+}
+
+.bg-custom-black {
+    background: var(--black) !important;
+}
+
+.lead {
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--light);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-contrast {
+    color: var(--white);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ====================== */
+/* КАРТОЧКИ ИГРОКОВ */
+/* ====================== */
+.player-img-container {
+    padding: var(--space-lg);
+    text-align: center;
+    background: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-red);
+    margin: 0 auto;
+    display: block;
+}
+
+.player-info {
+    padding: var(--space-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.player-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+    color: var(--white);
+}
+
+.player-role {
+    font-size: 0.875rem;
+    color: var(--primary-red);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-sm);
+}
+
+.player-stats {
+    font-size: 0.875rem;
+    color: var(--light-gray);
+    margin-bottom: var(--space-md);
+}
+
+.player-desc {
+    color: var(--light);
+    margin-bottom: var(--space-md);
+    flex: 1;
+}
+
+.player-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.tag {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--gray);
+    color: var(--light);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ====================== */
+/* КАРТОЧКИ МАТЧЕЙ */
+/* ====================== */
+.match-card {
+    background: var(--dark-gray);
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.match-card:focus-within {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
+}
+
+.match-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.tournament-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--primary-red);
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.match-time {
+    font-size: 0.875rem;
+    color: var(--light-gray);
+}
+
+.match-teams {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    text-align: center;
+}
+
+.team-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.team-name {
+    font-weight: 600;
+    color: var(--white);
+    text-align: center;
+    width: 100%;
+}
+
+.vs {
+    font-weight: 900;
+    color: var(--primary-red);
+    font-size: 1.25rem;
+}
+
+.team-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+}
+
+.team-cell img {
+    display: block;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.player-name,
+.player-role,
+.player-stats,
+.player-desc {
+    text-align: center;
+}
+
+/* ====================== */
+/* КАРТОЧКИ ДОСТИЖЕНИЙ */
+/* ====================== */
+.achievements-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(var(--space-md), 3vw, var(--space-xl));
+    justify-content: center;
+}
+
+.achievement-card {
+    flex: 1 1 250px;
+    max-width: 300px;
+    background: var(--gray);
+    border-radius: 12px;
+    padding: var(--space-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.achievement-icon {
+    font-size: 3rem;
+}
+
+.achievement-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0;
+}
+
+.achievement-card p {
+    color: var(--light);
+    margin: 0;
+}
+
+/* ====================== */
+/* ФОРМЫ */
+/* ====================== */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--gray);
+    border: 1px solid var(--light-gray);
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+}
+
+.form-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--light-gray);
+}
+
+.required {
+    color: var(--primary-red);
+}
+
+/* ====================== */
+/* УВЕДОМЛЕНИЯ */
+/* ====================== */
+.alert {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    color: var(--primary-red);
+    border: 1px solid var(--primary-red);
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.d-none {
+    display: none !important;
+}
+
+/* ====================== */
+/* АДАПТИВНОСТЬ НАВИГАЦИИ */
+/* ====================== */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--black);
+        flex-direction: column;
+        padding: var(--space-md);
+        gap: var(--space-sm);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 999;
+    }
+    
+    .nav-menu.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+    
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+}
+
+/* ====================== */
+/* Улучшенный UX для сенсорных устройств */
+/* ====================== */
+@media (pointer: coarse) {
+    .btn,
+    .nav-link,
+    .social-link,
+    .contact-link {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--space-sm) var(--space-md);
+    }
+}
+
+/* ====================== */
+/* Поддержка контейнерных запросов */
+/* ====================== */
+@supports (container-type: inline-size) {
+    .team-container {
+        container-type: inline-size;
+    }
+}
+
+/* ====================== */
+/* Адаптивность для достижений */
+/* ====================== */
+@media (max-width: 639px) {
+    .achievement-card {
+        flex-basis: 100%;
+        max-width: 400px;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 959px) {
+    .achievement-card {
+        flex-basis: calc(50% - 1rem);
+    }
+}
+
+@media (min-width: 960px) {
+    .achievement-card {
+        flex-basis: calc(25% - 1.5rem);
+    }
+}
+
+/* ====================== */
+/* Адаптивность для таблиц */
+/* ====================== */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ====================== */
+/* ТЕМНАЯ ТЕМА (А11y) */
+/* ====================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-red: #e55347;
+        --dark-red: #c44238;
+        --black: #0a0a0a;
+        --dark-gray: #1e1e1e;
+    }
+}
+
+/* ====================== */
+/* High contrast mode (А11y) */
+/* ====================== */
+@media (prefers-contrast: high) {
+    .btn-primary {
+        border: 2px solid var(--white);
+    }
+    
+    .nav-link {
+        border-bottom: 2px solid transparent;
+    }
+    
+    .nav-link:hover,
+    .nav-link.active {
+        border-bottom-color: var(--primary-red);
+    }
+    
+    :focus-visible {
+        outline: 3px solid var(--white);
+        outline-offset: 1px;
+    }
+}
+
+/* ====================== */
+/* PRINT STYLES (А11y) */
+/* ====================== */
+@media print {
+    .hero-video-container,
+    .nav-toggle,
+    .btn,
+    .social-links,
+    video,
+    .watch-btn,
+    .btn-details {
+        display: none !important;
+    }
+    
+    body {
+        color: #000 !important;
+        background: #fff !important;
+        font-size: 12pt;
+    }
+    
+    a {
+        color: #000 !important;
+        text-decoration: underline !important;
+    }
+    
+    .footer {
+        border-top: 1px solid #000 !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+    
+    .section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    .section-title::after {
+        background: #000 !important;
+    }
+}
+
+/* ====================== */
+/* АДАПТИВНЫЕ ИЗОБРАЖЕНИЯ (Занятие 16) */
+/* ====================== */
+
+/* Базовые адаптивные изображения */
+.responsive-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Object-fit свойства */
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.object-fit-contain {
+    object-fit: contain;
+    background: var(--gray);
+}
+
+.object-fit-fill {
+    object-fit: fill;
+}
+
+/* Контейнеры для aspect ratio */
+.aspect-ratio-16-9 {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.aspect-ratio-1-1 {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.aspect-ratio-4-3 {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+/* Retina изображения */
+.retina-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Галерея с адаптивной сеткой (Grid) */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--dark-gray);
+}
+
+.gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-image:hover {
+    transform: scale(1.05);
+}
+
+/* Адаптивность галереи */
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .gallery-image {
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .gallery-image {
+        height: 120px;
+    }
+}
+
+/* Picture element стили */
+picture {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Прогресс бары для статистики */
+.progress-container {
+    margin-bottom: 1.5rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--gray);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-red);
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+/* Lazy loading стили */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* Поддержка prefers-reduced-data */
+@media (prefers-reduced-data: reduce) {
+    .hero-video {
+        display: none !important;
+    }
+    
+    .hero-video-fallback {
+        display: block !important;
+    }
+    
+    img:not(.logo):not(.player-img):not(.team-logo) {
+        display: none;
+    }
+    
+    .player-img {
+        background: var(--primary-red);
+        color: transparent;
+    }
+}
+
+/* Контейнерные запросы для сетки игроков */
+.team-container {
+    container-type: inline-size;
+    container-name: team;
+    width: 100%;
+}
+
+@container team (max-width: 639px) {
+    .player-card {
+        flex-basis: 100%;
+        max-width: 400px;
+    }
+}
+
+@container team (min-width: 640px) and (max-width: 959px) {
+    .player-card {
+        flex-basis: calc(50% - 1rem);
+    }
+}
+
+@container team (min-width: 960px) and (max-width: 1199px) {
+    .player-card {
+        flex-basis: calc(33.333% - 1.33rem);
+    }
+}
+
+@container team (min-width: 1200px) {
+    .player-card {
+        flex-basis: calc(20% - 1.6rem);
+        max-width: 250px;
+    }
+}
+
+/* Живые регионы для динамического контента */
+.live-updates {
+    border: 2px solid var(--primary-red);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+/* Уведомления о состоянии */
+.status-message {
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    border-left: 4px solid var(--primary-red);
+    background: var(--dark-gray);
+}
+
+/* Анимации для prefers-reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+    .fade-in {
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .slide-up {
+        animation: slideUp 0.3s ease;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Клавиатурная навигация */
+.keyboard-navigation .player-card:focus,
+.keyboard-navigation .match-card:focus,
+.keyboard-navigation .nav-link:focus,
+.keyboard-navigation .btn:focus {
+    outline: 3px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+/* ====================== */
+/* ФИКСЫ ДЛЯ ПРЕДОТВРАЩЕНИЯ ДВОЙНОГО СКРОЛЛА */
+/* ====================== */
+
+/* Убираем все лишние overflow */
+.main-content,
+.section,
+.container,
+.team-grid,
+.matches-grid,
+.achievements-grid,
+.footer-content {
+    overflow: visible !important;
+}
+
+/* Фикс для очень высоких экранов */
+@media (min-height: 1200px) {
+    .section {
+        padding: clamp(var(--space-xl), 6vw, 4rem) var(--space-md);
+    }
+}
+
+/* Фикс для мобильных устройств */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+    }
+    
+    .main-content {
+        overflow: visible;
+    }
+}
+
+/* Гарантируем, что изображения не создают лишнего пространства */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Убираем лишние отступы у последнего элемента */
+.main-content > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Фикс для iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Фикс для старых браузеров */
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ====================== */
+/* КОНТЕЙНЕР ДЛЯ ВИДЕО ГЕРОЯ (вынесено из makesomenoize.html) */
+/* ====================== */
+.hero-video-container {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    min-height: 600px;
+    overflow: hidden;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-video-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.7) 50%,
+        rgba(0, 0, 0, 0.9) 100%
+    );
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 clamp(1rem, 5vw, 4rem);
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: clamp(1rem, 3vw, 2rem);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Адаптивность для видео контейнера */
+@media (max-width: 768px) {
+    .hero-video-container {
+        height: 80vh;
+        min-height: 500px;
+    }
+}
+
+@media (max-height: 600px) {
+    .hero-video-container {
+        height: 85vh;
+        min-height: 400px;
+    }
+}
+
+/* Для очень высоких экранов */
+@media (min-height: 1200px) {
+    .hero-video-container {
+        height: 80vh;
+        max-height: 800px;
+    }
+}
+
+/* Поддержка современных единиц измерения */
+@supports (height: 100svh) {
+    .hero-video-container {
+        height: 100svh;
+    }
+}
+
+@supports (height: 100dvh) {
+    .hero-video-container {
+        height: 100dvh;
+    }
+}
+
+/* Для prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .hero-video {
+        display: none;
+    }
+    .hero-video-fallback {
+        display: block;
+    }
+}
+
+/* Для prefers-reduced-data */
+@media (prefers-reduced-data: reduce) {
+    .hero-video {
+        display: none;
+    }
+    .hero-video-fallback {
+        display: block;
+    }
+}
