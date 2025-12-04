@@ -69,26 +69,26 @@
         }
         
         /* Контейнерные запросы */
-        @container team (max-width: 639px) {
+        @media (max-width: 639px) {
             .player-card {
                 flex-basis: 100%;
                 max-width: 400px;
             }
         }
         
-        @container team (min-width: 640px) and (max-width: 959px) {
+        @media (min-width: 640px) and (max-width: 959px) {
             .player-card {
                 flex-basis: calc(50% - 1rem);
             }
         }
         
-        @container team (min-width: 960px) and (max-width: 1199px) {
+        @media (min-width: 960px) and (max-width: 1199px) {
             .player-card {
                 flex-basis: calc(33.333% - 1.33rem);
             }
         }
         
-        @container team (min-width: 1200px) {
+        @media (min-width: 1200px) {
             .player-card {
                 flex-basis: calc(20% - 1.6rem);
                 max-width: 250px;
@@ -456,8 +456,8 @@
                              aria-labelledby="match1-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" role="text" aria-label="Турнир IEM Chengdu">IEM Chengdu</span>
-                            <time datetime="2025-11-03T19:00" role="text"
+                            <span class="tournament-badge" role="status" aria-label="Турнир IEM Chengdu">IEM Chengdu</span>
+                            <time datetime="2025-11-03T19:00" 
                                   class="match-time"
                                   aria-label="3 ноября 2025 года, 19:00">
                                 03.11.2025 | 19:00
@@ -517,8 +517,8 @@
                              aria-labelledby="match2-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" role="text" aria-label="Турнир BLAST Rivals Season 2">BLAST Rivals S2</span>
-                            <time datetime="2025-11-12T20:30" role="text"
+                            <span class="tournament-badge" role="status" aria-label="Турнир BLAST Rivals Season 2">BLAST Rivals S2</span>
+                            <time datetime="2025-11-12T20:30" 
                                   class="match-time"
                                   aria-label="12 ноября 2025 года, 20:30">
                                 12.11.2025 | 20:30
@@ -576,8 +576,8 @@
                              aria-labelledby="match3-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" role="text" aria-label="Турнир StarLadder Budapest Major">StarLadder Major</span>
-                            <time datetime="2025-11-24T18:00" role="text" 
+                            <span class="tournament-badge" role="status" aria-label="Турнир StarLadder Budapest Major">StarLadder Major</span>
+                            <time datetime="2025-11-24T18:00" 
                                   class="match-time"
                                   aria-label="24 ноября 2025 года, 18:00">
                                 24.11.2025 | 18:00
