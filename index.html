@@ -30,8 +30,6 @@
         
         /* Контейнерные запросы для сетки игроков */
         .team-container {
-            container-type: inline-size;
-            container-name: team;
             width: 100%;
         }
         
@@ -270,7 +268,6 @@
                     <div class="team-grid" role="list" aria-label="Состав команды MakeSomeNoize">
                         <!-- Игрок 1 с адаптивными изображениями -->
                         <article class="player-card" 
-                                 role="listitem" 
                                  tabindex="0" 
                                  aria-labelledby="player1-name"
                                  aria-describedby="player1-desc">
@@ -307,7 +304,6 @@
 
                         <!-- Игрок 2 -->
                         <article class="player-card" 
-                                 role="listitem" 
                                  tabindex="0" 
                                  aria-labelledby="player2-name"
                                  aria-describedby="player2-desc">
@@ -339,7 +335,6 @@
 
                         <!-- Игрок 3 -->
                         <article class="player-card" 
-                                 role="listitem" 
                                  tabindex="0" 
                                  aria-labelledby="player3-name"
                                  aria-describedby="player3-desc">
@@ -371,7 +366,6 @@
 
                         <!-- Игрок 4 -->
                         <article class="player-card" 
-                                 role="listitem" 
                                  tabindex="0" 
                                  aria-labelledby="player4-name"
                                  aria-describedby="player4-desc">
@@ -403,7 +397,6 @@
 
                         <!-- Игрок 5 -->
                         <article class="player-card" 
-                                 role="listitem" 
                                  tabindex="0" 
                                  aria-labelledby="player5-name"
                                  aria-describedby="player5-desc">
@@ -463,8 +456,8 @@
                              aria-labelledby="match1-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" aria-label="Турнир IEM Chengdu">IEM Chengdu</span>
-                            <time datetime="2025-11-03T19:00" 
+                            <span class="tournament-badge" role="text" aria-label="Турнир IEM Chengdu">IEM Chengdu</span>
+                            <time datetime="2025-11-03T19:00" role="text"
                                   class="match-time"
                                   aria-label="3 ноября 2025 года, 19:00">
                                 03.11.2025 | 19:00
@@ -524,8 +517,8 @@
                              aria-labelledby="match2-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" aria-label="Турнир BLAST Rivals Season 2">BLAST Rivals S2</span>
-                            <time datetime="2025-11-12T20:30" 
+                            <span class="tournament-badge" role="text" aria-label="Турнир BLAST Rivals Season 2">BLAST Rivals S2</span>
+                            <time datetime="2025-11-12T20:30" role="text"
                                   class="match-time"
                                   aria-label="12 ноября 2025 года, 20:30">
                                 12.11.2025 | 20:30
@@ -583,8 +576,8 @@
                              aria-labelledby="match3-title"
                              role="article">
                         <div class="match-header">
-                            <span class="tournament-badge" aria-label="Турнир StarLadder Budapest Major">StarLadder Major</span>
-                            <time datetime="2025-11-24T18:00" 
+                            <span class="tournament-badge" role="text" aria-label="Турнир StarLadder Budapest Major">StarLadder Major</span>
+                            <time datetime="2025-11-24T18:00" role="text" 
                                   class="match-time"
                                   aria-label="24 ноября 2025 года, 18:00">
                                 24.11.2025 | 18:00

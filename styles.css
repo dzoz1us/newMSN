@@ -37,9 +37,7 @@
     color-scheme: light dark;
 }
 
-/* ====================== */
 /* БАЗОВЫЕ СБРОСЫ И ФИКСЫ ДЛЯ СКРОЛЛА */
-/* ====================== */
 
 html {
     height: 100%;
@@ -63,9 +61,7 @@ body {
     flex-direction: column;
 }
 
-/* ====================== */
-/* A11y Улучшения (Занятие 17) */
-/* ====================== */
+/* A11y Улучшения */
 
 /* Плавные переходы для пользователей, которые не предпочитают уменьшенное движение */
 @media (prefers-reduced-motion: no-preference) {
@@ -100,9 +96,7 @@ body {
     }
 }
 
-/* ====================== */
 /* Ссылка для пропуска навигации (A11y) */
-/* ====================== */
 .skip-link {
     position: absolute;
     top: -40px;
@@ -123,9 +117,7 @@ body {
     outline-offset: 2px;
 }
 
-/* ====================== */
 /* Screen Reader Only */
-/* ====================== */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -147,9 +139,7 @@ body {
     white-space: normal;
 }
 
-/* ====================== */
 /* Улучшенные стили фокуса */
-/* ====================== */
 :focus-visible {
     outline: 3px solid var(--primary-red);
     outline-offset: 3px;
@@ -165,9 +155,7 @@ textarea:focus-visible {
     outline-offset: 2px;
 }
 
-/* ====================== */
 /* ОСНОВНАЯ НАВИГАЦИЯ */
-/* ====================== */
 .main-nav {
     position: sticky;
     top: 0;
@@ -252,18 +240,14 @@ textarea:focus-visible {
     outline-offset: 2px;
 }
 
-/* ====================== */
 /* ОСНОВНОЙ КОНТЕНТ */
-/* ====================== */
 .main-content {
     flex: 1 0 auto;
     width: 100%;
     display: block;
 }
 
-/* ====================== */
 /* СЕКЦИИ */
-/* ====================== */
 .section {
     padding: clamp(var(--space-2xl), 8vw, 6rem) var(--space-md);
     width: 100%;
@@ -286,9 +270,7 @@ textarea:focus-visible {
     position: relative;
 }
 
-/* ====================== */
 /* ЗАГОЛОВКИ СЕКЦИЙ */
-/* ====================== */
 .section-title {
     position: relative;
     margin-bottom: clamp(var(--space-xl), 5vw, var(--space-2xl));
@@ -317,9 +299,7 @@ textarea:focus-visible {
     transform: translateX(-50%);
 }
 
-/* ====================== */
 /* КНОПКИ */
-/* ====================== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -390,9 +370,7 @@ textarea:focus-visible {
     min-width: 36px;
 }
 
-/* ====================== */
 /* ФУТЕР */
-/* ====================== */
 .footer {
     background: var(--black);
     border-top: 2px solid var(--primary-red);
@@ -471,9 +449,7 @@ textarea:focus-visible {
     margin: 0;
 }
 
-/* ====================== */
 /* ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ */
-/* ====================== */
 .text-custom-red {
     color: var(--primary-red) !important;
 }
@@ -523,9 +499,7 @@ textarea:focus-visible {
     border: 0;
 }
 
-/* ====================== */
 /* КАРТОЧКИ ИГРОКОВ */
-/* ====================== */
 .player-img-container {
     padding: var(--space-lg);
     text-align: center;
@@ -595,9 +569,7 @@ textarea:focus-visible {
     letter-spacing: 0.5px;
 }
 
-/* ====================== */
 /* КАРТОЧКИ МАТЧЕЙ */
-/* ====================== */
 .match-card {
     background: var(--dark-gray);
     border: 1px solid var(--light-gray);
@@ -701,9 +673,7 @@ textarea:focus-visible {
     text-align: center;
 }
 
-/* ====================== */
 /* КАРТОЧКИ ДОСТИЖЕНИЙ */
-/* ====================== */
 .achievements-grid {
     display: flex;
     flex-wrap: wrap;
@@ -740,9 +710,7 @@ textarea:focus-visible {
     margin: 0;
 }
 
-/* ====================== */
 /* ФОРМЫ */
-/* ====================== */
 .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
@@ -791,9 +759,7 @@ textarea:focus-visible {
     color: var(--primary-red);
 }
 
-/* ====================== */
 /* УВЕДОМЛЕНИЯ */
-/* ====================== */
 .alert {
     padding: 1rem;
     border-radius: 6px;
@@ -816,34 +782,43 @@ textarea:focus-visible {
     display: none !important;
 }
 
-/* ====================== */
 /* АДАПТИВНОСТЬ НАВИГАЦИИ */
-/* ====================== */
 @media (max-width: 768px) {
     .nav-toggle {
         display: flex;
+        z-index: 1003;
     }
     
     .nav-menu {
         position: fixed;
-        top: 100%;
+        top: 0;
         left: 0;
         right: 0;
+        bottom: 0;
         background: var(--black);
         flex-direction: column;
-        padding: var(--space-md);
+        padding: var(--space-xl) var(--space-md);
         gap: var(--space-sm);
-        transform: translateY(-100%);
+        transform: translateX(100%);
         opacity: 0;
         visibility: hidden;
         transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 999;
+        z-index: 1002;
+        margin: 0;
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding-top: 80px; /* Отступ для кнопки меню */
     }
     
     .nav-menu.show {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
+    }
+
+    /* Улучшенная анимация иконки гамбургера */
+    .nav-toggle span {
+        transition: all 0.3s ease;
     }
     
     .nav-toggle[aria-expanded="true"] span:nth-child(1) {
@@ -859,9 +834,7 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
 /* Улучшенный UX для сенсорных устройств */
-/* ====================== */
 @media (pointer: coarse) {
     .btn,
     .nav-link,
@@ -873,18 +846,15 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
 /* Поддержка контейнерных запросов */
-/* ====================== */
 @supports (container-type: inline-size) {
     .team-container {
         container-type: inline-size;
+        container-type: team;
     }
 }
 
-/* ====================== */
 /* Адаптивность для достижений */
-/* ====================== */
 @media (max-width: 639px) {
     .achievement-card {
         flex-basis: 100%;
@@ -904,17 +874,13 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
 /* Адаптивность для таблиц */
-/* ====================== */
 .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-/* ====================== */
 /* ТЕМНАЯ ТЕМА (А11y) */
-/* ====================== */
 @media (prefers-color-scheme: dark) {
     :root {
         --primary-red: #e55347;
@@ -924,9 +890,7 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
 /* High contrast mode (А11y) */
-/* ====================== */
 @media (prefers-contrast: high) {
     .btn-primary {
         border: 2px solid var(--white);
@@ -947,9 +911,7 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
 /* PRINT STYLES (А11y) */
-/* ====================== */
 @media print {
     .hero-video-container,
     .nav-toggle,
@@ -988,9 +950,7 @@ textarea:focus-visible {
     }
 }
 
-/* ====================== */
-/* АДАПТИВНЫЕ ИЗОБРАЖЕНИЯ (Занятие 16) */
-/* ====================== */
+/* АДАПТИВНЫЕ ИЗОБРАЖЕНИЯ */
 
 /* Базовые адаптивные изображения */
 .responsive-image {
@@ -1147,15 +1107,12 @@ img[loading="lazy"].loaded {
 
 /* Контейнерные запросы для сетки игроков */
 .team-container {
-    container-type: inline-size;
-    container-name: team;
     width: 100%;
 }
 
 @container team (max-width: 639px) {
     .player-card {
         flex-basis: 100%;
-        max-width: 400px;
     }
 }
 
@@ -1226,10 +1183,7 @@ img[loading="lazy"].loaded {
     outline-offset: 2px;
 }
 
-/* ====================== */
 /* ФИКСЫ ДЛЯ ПРЕДОТВРАЩЕНИЯ ДВОЙНОГО СКРОЛЛА */
-/* ====================== */
-
 /* Убираем все лишние overflow */
 .main-content,
 .section,
@@ -1284,9 +1238,7 @@ img {
     box-sizing: border-box;
 }
 
-/* ====================== */
 /* КОНТЕЙНЕР ДЛЯ ВИДЕО ГЕРОЯ (вынесено из makesomenoize.html) */
-/* ====================== */
 .hero-video-container {
     position: relative;
     width: 100%;
