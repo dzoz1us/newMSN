@@ -76,19 +76,19 @@
             }
         }
         
-        @container team (min-width: 640px) and (max-width: 959px) {
+        @media (min-width: 640px) and (max-width: 959px) {
             .player-card {
                 flex-basis: calc(50% - 1rem);
             }
         }
         
-        @container team (min-width: 960px) and (max-width: 1199px) {
+        @media (min-width: 960px) and (max-width: 1199px) {
             .player-card {
                 flex-basis: calc(33.333% - 1.33rem);
             }
         }
         
-        @container team (min-width: 1200px) {
+        @media (min-width: 1200px) {
             .player-card {
                 flex-basis: calc(20% - 1.6rem);
                 max-width: 250px;
@@ -163,7 +163,7 @@
     </a>
 
     <!-- Навигация с улучшенными ARIA атрибутами -->
-    <nav class="main-nav" role="navigation" aria-label="Основная навигация">
+    <nav class="main-nav" aria-label="Основная навигация">
         <div class="nav-container">
             <a href="index.html" class="nav-brand" aria-label="MakeSomeNoize - главная страница">
                 <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
@@ -211,7 +211,7 @@
     </nav>
 
     <!-- Основной контент -->
-    <main id="main-content" class="main-content" role="main">
+    <main id="main-content" class="main-content">
         <!-- Герой секция с доступным видео -->
         <section class="hero-section" aria-labelledby="hero-title">
             <div class="hero-video-container">
@@ -453,13 +453,11 @@
                     <!-- Матч 1 -->
                     <article class="match-card" 
                              tabindex="0" 
-                             aria-labelledby="match1-title"
-                             role="article">
+                             aria-labelledby="match1-title">
                         <div class="match-header">
                             <span class="tournament-badge" role="status" aria-label="Турнир IEM Chengdu">IEM Chengdu</span>
                             <time datetime="2025-11-03T19:00" 
-                                  class="match-time"
-                                  aria-label="3 ноября 2025 года, 19:00">
+                                  class="match-time">
                                 03.11.2025 | 19:00
                             </time>
                         </div>
@@ -514,13 +512,11 @@
                     <!-- Матч 2 -->
                     <article class="match-card" 
                              tabindex="0" 
-                             aria-labelledby="match2-title"
-                             role="article">
+                             aria-labelledby="match2-title">
                         <div class="match-header">
                             <span class="tournament-badge" role="status" aria-label="Турнир BLAST Rivals Season 2">BLAST Rivals S2</span>
                             <time datetime="2025-11-12T20:30" 
-                                  class="match-time"
-                                  aria-label="12 ноября 2025 года, 20:30">
+                                  class="match-time">
                                 12.11.2025 | 20:30
                             </time>
                         </div>
@@ -573,13 +569,11 @@
                     <!-- Матч 3 -->
                     <article class="match-card" 
                              tabindex="0" 
-                             aria-labelledby="match3-title"
-                             role="article">
+                             aria-labelledby="match3-title">
                         <div class="match-header">
                             <span class="tournament-badge" role="status" aria-label="Турнир StarLadder Budapest Major">StarLadder Major</span>
                             <time datetime="2025-11-24T18:00" 
-                                  class="match-time"
-                                  aria-label="24 ноября 2025 года, 18:00">
+                                  class="match-time">
                                 24.11.2025 | 18:00
                             </time>
                         </div>
@@ -672,7 +666,7 @@
     </main>
 
     <!-- Футер с улучшенной доступностью -->
-    <footer class="footer" role="contentinfo">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
@@ -681,12 +675,11 @@
                 </div>
                 
                 <div class="footer-social">
-                    <div class="social-links" role="list" aria-label="Социальные сети команды">
+                    <div class="social-links" aria-label="Социальные сети команды">
                         <a href="https://www.twitch.tv/dzozius" 
                            class="social-link" 
                            target="_blank" 
                            rel="noopener noreferrer"
-                           role="listitem"
                            aria-label="Twitch канал команды (открывается в новой вкладке)">
                             <i class="bi bi-twitch" aria-hidden="true"></i>
                         </a>
@@ -694,7 +687,6 @@
                            class="social-link" 
                            target="_blank" 
                            rel="noopener noreferrer"
-                           role="listitem"
                            aria-label="Telegram канал команды (открывается в новой вкладке)">
                             <i class="bi bi-telegram" aria-hidden="true"></i>
                         </a>
@@ -702,7 +694,6 @@
                            class="social-link" 
                            target="_blank" 
                            rel="noopener noreferrer"
-                           role="listitem"
                            aria-label="YouTube канал команды (открывается в новой вкладке)">
                             <i class="bi bi-youtube" aria-hidden="true"></i>
                         </a>
@@ -710,7 +701,6 @@
                            class="social-link" 
                            target="_blank" 
                            rel="noopener noreferrer"
-                           role="listitem"
                            aria-label="Discord сервер команды (открывается в новой вкладке)">
                             <i class="bi bi-discord" aria-hidden="true"></i>
                         </a>
@@ -718,7 +708,6 @@
                            class="social-link" 
                            target="_blank" 
                            rel="noopener noreferrer"
-                           role="listitem"
                            aria-label="Instagram команды (открывается в новой вкладке)">
                             <i class="bi bi-instagram" aria-hidden="true"></i>
                         </a>
